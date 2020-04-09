@@ -22,7 +22,7 @@ export class Home extends React.Component {
         const { dispatch } = this.props;
         const { user, room } = this.state;
         dispatch(chatActions.join(user, room));
-        Actions.chat({title: 'Salon "${room}"' });
+        Actions.chat({title: `Salon "${room}"` });
     }
 
     render() {

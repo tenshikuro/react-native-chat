@@ -28,6 +28,12 @@ const messages = [
 
 export class Chat extends React.Component {
 
+    getData() {
+        const { messages } = this.props;
+        return messages.map((message, i) => ({
+            ...message, key: 'message_${i}'
+        }));
+    }
     render() {
         const { user } = this.props;
         
@@ -59,7 +65,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#DDD'
     },
     composerContainer: {
-        flex: 1,
+        
         flexDirection: 'row',
         
     },
