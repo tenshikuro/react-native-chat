@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, Button, StyleSheet } from 'react-native';
+import { Text, TextInput, View, Button, StyleSheet, Header } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { chatActions } from '../actions';
@@ -29,7 +29,9 @@ export class Home extends React.Component {
         const { user, room } = this.state;
 
         return (
+            
             <View style={styles.container}>
+                
                 <Text style={styles.h1}>Bienvenue !</Text>
                 <Text style={styles.label}>
                     Nom d'utilisateur :
@@ -52,7 +54,8 @@ export class Home extends React.Component {
                 <Button
                 title="Let's chat !"
                 onPress={this.handleChatPress}
-                style={styles.button}
+                color="#f50057"
+                overrides={{backgroundColor: "3fffff"}}
                 />
             </View>
         );
@@ -62,32 +65,38 @@ export class Home extends React.Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#CCC',
+      backgroundColor: '#333',
       alignItems: 'center',
       justifyContent: 'center'
     },
     h1 : {
-        color: 'red'
+        color: '#dd33fa',
+        fontSize: 30,
+        
     },
     label: {
         alignSelf: 'flex-start',
         marginTop: 16,
-        textAlign: 'left'
+        marginLeft: 35,
+        textAlign: 'center',
+        color: 'white',
+        
     },
     big: {
         fontSize: 20,
-        color: 'blue'
+        color: '#155fa0'
     },
     input : {
         backgroundColor: "white",
         borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "red",
+        borderWidth: 2,
+        borderColor: "#dd33fa",
+        borderRadius: 20,
         margin : 8,
         padding: 4,
-        width: '100%'
+        width: '90%'
     },
     button: {
-
+        
     }
   });

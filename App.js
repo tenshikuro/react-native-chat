@@ -1,11 +1,12 @@
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import { Home, Chat } from './components';
 import rootReducer from './reducers';
 import { Router, Stack, Scene } from 'react-native-router-flux';
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default class App extends React.Component {
   render(){

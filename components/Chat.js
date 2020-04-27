@@ -1,57 +1,78 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FlatList, View, StyleSheet, TextInput, Button } from 'react-native';
+import { FlatList, View, StyleSheet, TextInput, Button, Text } from 'react-native';
 import { MessageItem } from './';
-const messages = [
-    {
-        content: 'Message 1',
-        author: 'robert',
-        created_at: new Date()
-    }, {
-        content: 'Message 2',
-        author: 'amelie',
-        created_at: new Date()
-    }, {
-        content: 'Message 3',
-        author: 'robert',
-        created_at: new Date()
-    }
-];
+import { chatActions} from '../actions';
 
 @connect(({ 
     chat: {
         user,
         room,
-        messages
+        messages, 
+        error
     }
-}) => ({ user, room , messages }))
+}) => ({ user, room , messages, error }))
 
 export class Chat extends React.Component {
+
+    state = {
+        content: ''
+    }
 
     getData() {
         const { messages } = this.props;
         return messages.map((message, i) => ({
-            ...message, key: 'message_${i}'
+            ...message, key: `message_${i}`
         }));
     }
+
+    handleContentChange = content => {
+        this.setState({ content });
+    }
+
+    handleSendPress = e => {
+        const { dispatch } = this.props;
+        const { content } = this.state;
+        
+        if(content != '')
+        {
+            dispatch(chatActions.sendMessage({ content}));
+            this.setState({content: ''});
+        }
+    }
+
     render() {
-        const { user } = this.props;
+        const { user, error } = this.props;
+        const {content} = this.state;
         
         return (
-            <View style={styles.container}>
-                <FlatList
-                    data={messages.map((message, i) => ({ ...message, key: 'message_${i}'}) )}
-                    renderItem={({ item: message}) =>
-                        <MessageItem user={user} message={message} /> 
-                    }
-                />  
+            
+            <View style = {styles.container}>  
+           
+                {error &&
+                <Text>Error: {error.message}</Text>
+                }
+                <FlatList style={styles.list}
+                    data={this.getData()}
+                    renderItem={({ item: message})=>
+                        <MessageItem user={user} message={message} />
+                    }                
+                />
+
                 <View style={styles.composerContainer}>
-                <TextInput
-                    style={styles.composerInput}
+                    <TextInput
+                        style={styles.composerInput}
+                        value={content}
+                        onChangeText={this.handleContentChange}
                     />
-                <Button title="Send"
+                    <Button
+                    title="Send"
+                    onPress={this.handleSendPress}  
+                    disabled={ content == '' }          
                     />
-                </View> 
+                </View>              
+
+
             </View>
             
         );
@@ -62,7 +83,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#DDD'
+        backgroundColor: '#333',
     },
     composerContainer: {
         
@@ -72,6 +93,11 @@ const styles = StyleSheet.create({
     composerInput: {
         flex: 1,
         backgroundColor: '#FFF',
-
+        
+    },
+    coco:
+    {
+        flex: 1,
+        backgroundColor: '#d6E7A9',
     }
 });

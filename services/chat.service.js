@@ -1,28 +1,69 @@
-import PouchDB from 'pouch-react-native';
+import PouchDB from 'pouchdb-react-native';
 
-class Chat {
+const REMOTE_DB = 'http://gathor.org:5984/';
 
-    user = null
-    room = null
-    db = null
+let db, currentUser, currentroom, sync = null;
 
-
-    async join(user, room) {
-        this.user = user || 'Anonymous';
-        this.room = room || 'général';
-        try {
-            this.db = new PouchDB();
-
-            const response = await this.db.allDocs({
-                include_docs: true
-            });
-
-            return response.rows.map(row => row.doc);
-        } catch(e) {
-            console.error(e)
-        }
-        
-    }
+export const chatService = {
+    join,
+    sendMessage,
+    listMessages
 }
 
-export const chatService = new Chat();
+
+    function join(user, room, onSync, onFail){
+        if(/^_/.test(room)){
+            onFail('Le nom du salon ne peut pas commencer par "_"');
+        }
+        currentUser = user || 'Anonymous';
+        currentroom = room.toLowerCase() || 'général';
+        db = new PouchDB(currentroom);
+
+            sync = db.sync(`${REMOTE_DB}/${currentroom}`, {
+                live: true,
+                retry: true,
+                continuous: true
+            });
+            sync.on('change', handleChange(onSync));
+            sync.on('error', handleError(onFail));
+            return listMessages();
+        }
+
+
+    function listMessages() {
+        return db.allDocs({
+            include_docs: true,
+        }).then(response => {
+           return response.rows
+            .map(row => row.doc)
+            .sort((a,b) => a.created_at > b.created_at)
+        });
+    }    
+
+
+    function handleChange(callback){
+        return change => {
+            console.log('change', change);
+            callback(change);
+        }
+    }    
+
+
+    function handleError(callabck){
+        return error => {
+            callabck(error);
+        }
+    }  
+
+
+    function sendMessage(message) {
+        message = {
+            ...message,
+             author: currentUser,
+             created_at: new Date()
+            };
+        return db.post(message).then(({id}) => ({
+            ...message,
+            id
+        }));
+    }
