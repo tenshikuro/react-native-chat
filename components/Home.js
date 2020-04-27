@@ -12,17 +12,20 @@ export class Home extends React.Component {
         user: "",
         room: ""
     }
+
     handleUserChange = user => {
         this.setState({user})
     }
+
     handleRoomChange = room => {
         this.setState({room})
     }
+
     handleChatPress = e => {
         const { dispatch } = this.props;
         const { user, room } = this.state;
         dispatch(chatActions.join(user, room));
-        Actions.chat({title: `Salon "${room}"` });
+        Actions.chat({title: `Salon "${room || "Général"}"` });
     }
 
     render() {

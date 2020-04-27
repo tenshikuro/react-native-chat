@@ -56,7 +56,10 @@ export class Chat extends React.Component {
                     data={this.getData()}
                     renderItem={({ item: message})=>
                         <MessageItem user={user} message={message} />
-                    }                
+                    }
+                    ref= {ref => this.listEl = ref}
+                    onContentSizeChange={() => this.listEl.scrollToEnd({animated:true})}
+                    onLayout={() => this.listEl.scrollToEnd({animated:true})}               
                 />
 
                 <View style={styles.composerContainer}>

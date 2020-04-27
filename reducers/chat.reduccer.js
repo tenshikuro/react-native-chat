@@ -1,3 +1,5 @@
+import { Actions } from "react-native-router-flux";
+
 const initState = {
     user: "Robert",
     room: null,
@@ -33,10 +35,17 @@ export const chat = function(state = initState, action) {
             }
             
         case 'FAILURE':
+        case 'SYNC_FAILURE':
             return {
                 ...state,
                 error: action.error
             };
+
+        case 'SYNC_SUCCESS':
+            return {
+                ...state,
+                messages: action.messages
+            };  
     }
 
     return state;

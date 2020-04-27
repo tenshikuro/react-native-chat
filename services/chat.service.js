@@ -44,7 +44,9 @@ export const chatService = {
     function handleChange(callback){
         return change => {
             console.log('change', change);
-            callback(change);
+            listMessages()
+            .then(messages => callback(messages))
+            .catch(console.error);
         }
     }    
 

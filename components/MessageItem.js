@@ -14,17 +14,20 @@ export class MessageItem extends React.Component {
                 backgroundColor: isAuthor ? '#55F' : "#CCC",
                 borderBottomLeftRadius : isAuthor ? 16 : 0,
                 borderBottomRightRadius : isAuthor ? 0 : 16,
-                }]}>
-                <Text  style={{
-                    color: isAuthor ? 'white' : "black"
-                }}>
-                    {content}
-                </Text>
-                <Text style={[styles.timestamp, {
-                    color: isAuthor ? '#DDD' : "#555"
-                }]}>
-                    {moment(created_at).fromNow()}
-                </Text>
+            }]}>
+
+                {!isAuthor &&
+                    <Text style={styles.author}>
+                        {author}
+                    </Text>
+                }
+
+            <Text style={[styles.content,{color: isAuthor ? 'white' : 'black'}]}>{content}</Text>
+            <Text style={[styles.timestamp, {
+                color: isAuthor ? '#DDD' : "#555"
+            }]}>
+                {moment(created_at).fromNow()}
+            </Text>
             </View>
         )
     }

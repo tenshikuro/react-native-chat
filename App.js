@@ -6,6 +6,8 @@ import { Home, Chat } from './components';
 import rootReducer from './reducers';
 import { Router, Stack, Scene } from 'react-native-router-flux';
 
+console.ignoredYellowBox = ['Setting a timer'];
+
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default class App extends React.Component {
